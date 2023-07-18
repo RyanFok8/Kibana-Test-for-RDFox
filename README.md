@@ -5,14 +5,16 @@
 1. [Requirements](#requirements)
 2. [Setting up](#setting-up)
    * [Windows](#windows)
-   * [macOS](#macOS)
-3. [Quit/Cleanup](#quit-cleanup)
+   * [macOS](#macos)
+3. [Quit/Cleanup](#quitcleanup)
 4. [Getting started](#getting-started)
    * [To create a visualisation from scratch](#to-create-a-visualisation-from-scratch)
-   * [If you have a saved dashboard `.ndjson` and a different `.jsonl` file](#if-you-have-a-saved-dashboard-.ndjson-and-a-different-.jsonl-file)
+   * [If you have a saved dashboard `.ndjson` and a different `.jsonl` file](#if-you-have-a-saved-dashboard-ndjson-and-a-different-jsonl-file)
 5. [Miscellaneous](#miscellaneous)
    * [Formatting numbers](#formatting-numbers)
-   * []
+   * [Importing and exporting Dashboards `.ndjson`](#importing-and-exporting-dashboards-ndjson)
+   * [Combining data views/index patterns](#combining-data-viewsindex-patterns)
+   * [Double checking the basic license](#double-checking-the-basic-license)
    
 
 
@@ -103,8 +105,14 @@ If you want to change the presentation of numbers in visualisation, e.g., to the
 4. Toggle the **Set format**, and choose the appropriate **Format** and **Numeral.js format pattern** (Default is 3dp)
 5. Save the settings
 
-### Importing and exporting Dashboards (`.ndjson`)
-
+### Importing and exporting Dashboards `.ndjson`
+1. Go to **Management**, and click **Saved objects** under **Kibana**
+2. For import:
+   * lll
+   * lll
+3. For export:
+   * lll
+   * lll
 ### Combining data views/index patterns
 1. Go to **Management**, click **Data Views** in **Kibana**
 2. Click **Create data view**
