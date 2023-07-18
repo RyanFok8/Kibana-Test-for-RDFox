@@ -78,10 +78,8 @@ docker-compose down
 
 
 
-
-
 ## Miscellaneous
-#### Formatting numbers
+### Formatting numbers
 If you want to change the presentation of numbers in visualisation, e.g., to the nearest integer, to 3 decimal places...
 1. Open the sidebar, scroll to the bottom, and click **Management**
 2. In the **Kibana** section, click data view
@@ -89,6 +87,14 @@ If you want to change the presentation of numbers in visualisation, e.g., to the
 4. Toggle the **Set format**, and choose the appropriate **Format** and **Numeral.js format pattern** (Default is 3dp)
 5. Save the settings
 
-#### Importing and exporting Dashboards (`.ndjson`)
+### Importing and exporting Dashboards (`.ndjson`)
 
-#### Combining two or more data views/ index patterns
+### Combining data views/index patterns
+1. Go to **Management**, click **Data Views** in **Kibana**
+2. Click **Create data view**
+3. To combine two or more data views/index patterns, seperate them using comma, e.g., `index_1, index_2, index_3` in the index pattern row
+
+### Double checking the basic license
+1. Go to **Management** and scroll to the bottom
+2. Click on **License Management** and it should show **Your Basic license is active**
+
