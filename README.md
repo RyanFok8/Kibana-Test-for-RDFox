@@ -6,7 +6,7 @@
 2. [Setting up](#setting-up)
    * [Windows](#windows)
    * [macOS](#macOS)
-3. [Quit/Cleanup](#quit/cleanup)
+3. [Quit/Cleanup](#quit-cleanup)
 4. [Getting started](#getting-started)
    * [To create a visualisation from scratch](#to-create-a-visualisation-from-scratch)
    * [If you have a saved dashboard `.ndjson` and a different `.jsonl` file](#if-you-have-a-saved-dashboard-.ndjson-and-a-different-.jsonl-file)
