@@ -1,5 +1,5 @@
 # Using Kibana to visualise RDFox performance regression test
-**remember to add lisence
+**remember to add license
 
 ## Contents
 1. [Requirements](#requirements)
@@ -9,8 +9,11 @@
 3. [Quit/Cleanup](#quitcleanup)
 4. [Getting started](#getting-started)
    * [To create a visualisation from scratch](#to-create-a-visualisation-from-scratch)
+     * [Tag Clouds](#tag-clouds)
+     * [Grouped bar charts](#grouped-bar-charts)
    * [If you have a saved dashboard `.ndjson` and a different `.jsonl` file](#if-you-have-a-saved-dashboard-ndjson-and-a-different-jsonl-file)
 5. [Miscellaneous](#miscellaneous)
+   * [Filtering data](#filtering-data)
    * [Formatting numbers](#formatting-numbers)
    * [Importing and exporting Dashboards `.ndjson`](#importing-and-exporting-dashboards-ndjson)
    * [Combining data views/index patterns](#combining-data-viewsindex-patterns)
@@ -27,8 +30,7 @@
 ## Setting up
 ### Windows
 
-If you are using the legacy Hyper-V mode of _Docker Desktop for Windows_, ensure [File Sharing](https://docs.docker.com/desktop/settings/windows/#file-sharing) is
-enabled for the `C:` drive.
+If you are using the legacy Hyper-V mode of _Docker Desktop for Windows_, ensure [File Sharing](https://docs.docker.com/desktop/settings/windows/#file-sharing) is enabled for the `C:` drive.
 
 ### macOS
 
@@ -36,7 +38,7 @@ The default configuration of _Docker Desktop for Mac_ allows mounting files from
 `/tmp` and `/var/folders` exclusively. Make sure the repository is cloned in one of those locations or follow the
 instructions from the [documentation](https://docs.docker.com/desktop/settings/mac/#file-sharing) to add more locations.
 
-Make sure your Docker Desktop is opened and clone this repository onto the Docker host that will run the stack with the command below:
+Make sure your Docker Desktop is opened and clone this repository onto the Docker host that will run the stack:
 
 ```sh
 git clone https://github.com/deviantony/docker-elk.git
@@ -78,12 +80,32 @@ docker-compose down
 
 ## Getting started
 **Note index patterns has been renamed to data views
-### To create a visualisation from scratch
 
+### To create a visualisation from scratch
 1. Run the regression test, and generate a `.jsonl` file by including 'jsonl' in the '-a'
 2. Upload the `.jsonl` file in the **Get started by adding integrations** section on the home page and press import
-3. Create an Index name to identify the source file
-4. 
+3. Create an Index name to identify the source file and press import
+4. When import successful, return back to home page
+
+After ingesting the data, if we want to create a new dashboard from scratch:
+1. Open the sidebar, choose **Dashboard** under **Analytics**
+2. Click on **Create dashboard**
+   * Under **Select type**, **Aggregation based --> Tag clouds** can be used to display fields directly, e.g., runId, system, architecture, step, stepType...
+   * While **Lens** can be used to analyse numbers through bar chart, pie graph..., with different aggregations (count, median, average...)
+
+#### Tag clouds
+Tag clouds are used to display fields directly, if you want to display all the stepType(import, query, materialization):
+- **Select type --> Aggregation based --> Tag clouds** and choose the source file
+- Add a **bucket** on the right hand side, with **Terms** as **Aggregation**
+- Select an appropriate **field**, **stepType** in this case
+- The **size** should be bigger than the number of different stepTypes in order to display them all
+- Notice on the top left, you can freely switch between different data source
+- Press **Save and Return** on the upper right and the visualisation will be displayed on the dashboard
+
+#### Grouped bar charts
+Bar charts can be used to visualise and compare performance between different RDFox versions
+
+
 
 
 ### If you have a saved dashboard `.ndjson` and a different `.jsonl` file
@@ -97,6 +119,10 @@ docker-compose down
 
 
 ## Miscellaneous
+
+### Filtering data
+click tag clouds or KQL
+
 ### Formatting numbers
 If you want to change the presentation of numbers in visualisation, e.g., to the nearest integer, to 3 decimal places...
 1. Open the sidebar, scroll to the bottom, and click **Management**
@@ -122,3 +148,12 @@ If you want to change the presentation of numbers in visualisation, e.g., to the
 1. Go to **Management** and scroll to the bottom
 2. Click on **License Management** and it should show **Your Basic license is active**
 
+
+
+
+
+
+some drafts:
+- breakdown for grouped bar charts
+- tag clouds in aggregation to show ids, system...
+- apply filters
