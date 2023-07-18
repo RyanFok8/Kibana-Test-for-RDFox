@@ -7,11 +7,9 @@
 * 1.5 GB of RAM
 
 ## Setting up
-
-
 #### Windows
 
-If you are using the legacy Hyper-V mode of _Docker Desktop for Windows_, ensure [File Sharing][win-filesharing] is
+If you are using the legacy Hyper-V mode of _Docker Desktop for Windows_, ensure [File Sharing](https://docs.docker.com/desktop/settings/windows/#file-sharing) is
 enabled for the `C:` drive.
 
 #### macOS
@@ -49,4 +47,11 @@ browser and use the following (default) credentials to log in:
 You can change your password by clicking the icon located on the top left corner.
 
 ## Getting started
+#### To create a visualisation from scratch
+
+1. Run the regression test, and generate a `.jsonl` file by including 'jsonl' in the actions
+2. Upload the `.jsonl` file in the **Get started by adding integrations** section on the home page and press import
+3. Create an Index name to identify the source file
+4. 
+
 
