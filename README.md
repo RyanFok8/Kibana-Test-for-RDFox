@@ -1,6 +1,6 @@
 # Using Kibana to visualise RDFox performance regression test
 
-###Setting up
+### Setting up
 
 Clone this repository onto the Docker host that will run the stack with the command below:
 
