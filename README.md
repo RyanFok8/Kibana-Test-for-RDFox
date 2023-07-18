@@ -15,3 +15,15 @@ Then, open the folder in the terminal and initialize the Elasticsearch users and
 ```sh
 docker-compose up setup
 ```
+
+If the setup completed without an error, start the other stack components:
+
+```sh
+docker-compose up
+```
+
+Give Kibana about a minute to initialize, then access the Kibana web UI by opening <http://localhost:5601> in a web
+browser and use the following (default) credentials to log in:
+
+* user: *elastic*
+* password: *changeme*
