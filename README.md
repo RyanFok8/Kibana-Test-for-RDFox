@@ -157,3 +157,38 @@ some drafts:
 - breakdown for grouped bar charts
 - tag clouds in aggregation to show ids, system...
 - apply filters
+
+
+
+## vega
+
+```sh
+{
+  $schema: https://vega.github.io/schema/vega-lite/v5.json
+  title: Country fertility representation
+  mark: {"type": "point", "tooltip": true}
+  data: {
+    url: {
+      %context%: true
+      index: scatter
+      body: {
+        size: 10000
+        _source: ["country", "lifeExpectancy", "fertility"]
+      }
+    }
+    format: {property: "hits.hits"}
+  }
+  encoding: {
+    x: {field: "_source.lifeExpectancy", type: "quantitative", title: "Life Expectancy"}
+    y: {field: "_source.fertility", type: "quantitative", title: "Fertility"}
+    tooltip: [
+      {"field": "_source.country", "type": "nominal", "title": "Country"}
+      {"field": "_source.lifeExpectancy", "type": "nominal", "title": "Life Expectancy"}
+      {"field": "_source.fertility", "type": "nominal", "title": "Fertility"}
+    ]
+  }
+}
+```
+https://www.youtube.com/watch?v=5giacrHVYe4
+https://www.elastic.co/blog/custom-vega-visualizations-in-kibana
+https://afivan.com/2021/11/09/elastic-search-data-visualization-with-kibana-how-to-create-a-scatter-plot-with-vega-lite/
