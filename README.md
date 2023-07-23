@@ -117,6 +117,8 @@ Bar charts can be used to visualise and compare performance between different RD
 ## Update API
 The API provides ... 
 
+Open console bla bla
+
 Assume you have a json file like this:
 
 ```sh
@@ -137,9 +139,38 @@ curl -XPOST 'http://localhost:9200/my_index/_update/1' -d '{
   }
 }'
 ```
+so the document will look like this:
 
+```sh
+{
+  "name": "John Doe",
+  "age": 30,
+  "salary": 50000,
+  "month": 12,
+  "monthly_salary": 4166.666666666667
+}
+```
+To add a field "rate" to the documents in the "my_index" index when both "time" and "distance" exist, with the value calculated as "distance / time", you can use the Elasticsearch Update API with a Painless script. The script will check if both "time" and "distance" fields exist in the document and then perform the calculation to add the "rate" field.
+```sh
+POST /my_index/_update_by_query
+{
+  "query": {
+    "bool": {
+      "filter": [
+        { "exists": { "field": "time" } },
+        { "exists": { "field": "distance" } }
+      ]
+    }
+  },
+  "script": {
+    "source": "ctx._source.rate = ctx._source.distance / ctx._source.time",
+    "lang": "painless"
+  }
+}
+```
+In this example, we used the Update By Query API with a Painless script to add the "rate" field to the documents where both "time" and "distance" fields exist. The "query" section of the JSON payload uses a "bool" query with two "exists" queries to filter documents that have both "time" and "distance" fields.
 
-
+The "script" section of the JSON payload contains the Painless script to calculate the "rate" field by dividing the "distance" by the "time" and then adding the "rate" field to the document.
 
 ## Miscellaneous
 
