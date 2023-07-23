@@ -12,7 +12,8 @@
      * [Tag Clouds](#tag-clouds)
      * [Grouped bar charts](#grouped-bar-charts)
    * [If you have a saved dashboard `.ndjson` and a different `.jsonl` file](#if-you-have-a-saved-dashboard-ndjson-and-a-different-jsonl-file)
-5. [Miscellaneous](#miscellaneous)
+5. [Update API](#update-api)
+6. [Miscellaneous](#miscellaneous)
    * [Filtering data](#filtering-data)
    * [Formatting numbers](#formatting-numbers)
    * [Importing and exporting Dashboards `.ndjson`](#importing-and-exporting-dashboards-ndjson)
@@ -68,7 +69,7 @@ You can change your password by clicking the icon located on the top left corner
 
 ## Quit/Cleanup
 
-To stop Elasticsearch and Kibana:
+To stop the application (stop and remove the containers but keep the data and volumes), use:
 ```sh
 docker-compose stop
 ```
@@ -113,7 +114,29 @@ Bar charts can be used to visualise and compare performance between different RD
 2. In the **Kibana** section, choose **Saved objects**
 3. Import the dashboard you want
 
+## Update API
+The API provides ... 
 
+Assume you have a json file like this:
+
+```sh
+{
+  "name": "John Doe",
+  "age": 30,
+  "salary": 50000,
+  "month": 12
+}
+```
+and if you want to add a field monthly salary:
+
+```sh
+curl -XPOST 'http://localhost:9200/my_index/_update/1' -d '{
+  "script": {
+    "source": "ctx._source.monthly_salary = ctx._source.salary / ctx._source.month",
+    "lang": "painless"
+  }
+}'
+```
 
 
 
