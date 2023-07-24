@@ -9,11 +9,11 @@
 3. [Quit/Cleanup](#quitcleanup)
 4. [Getting started](#getting-started)
    * [To create a visualisation from scratch](#to-create-a-visualisation-from-scratch)
+     * [Update API/Update By Query API](#update-api-update-by-query-api)
      * [Tag Clouds](#tag-clouds)
      * [Grouped bar charts](#grouped-bar-charts)
    * [If you have a saved dashboard `.ndjson` and a different `.jsonl` file](#if-you-have-a-saved-dashboard-ndjson-and-a-different-jsonl-file)
-5. [Update API/Update By Query API](#update-api-update-by-query-api)
-6. [Miscellaneous](#miscellaneous)
+5. [Miscellaneous](#miscellaneous)
    * [Filtering data](#filtering-data)
    * [Formatting numbers](#formatting-numbers)
    * [Importing and exporting Dashboards `.ndjson`](#importing-and-exporting-dashboards-ndjson)
@@ -47,7 +47,8 @@ git clone https://github.com/deviantony/docker-elk.git
 
 Open `elasticsearch.yml` and switch the value of `xpack.license.self_generated.type` setting from `trial` to `basic` to disable paid features.
 
-Then, open the folder in the terminal and initialize the Elasticsearch users and groups required by docker-elk by executing the command:
+Then, open the folder in the terminal and initialize the Elasticsearch users and groups required by docker-elk by executing the command: 
+(Note: This task only needs to be performed once, during the *initial* startup ofthe stack)
 
 ```sh
 docker-compose up setup
@@ -76,7 +77,7 @@ docker-compose stop
 
 To shutdown the stack and remove all persisted data:
 ```sh
-docker-compose down
+docker-compose down -v
 ```
 
 ## Getting started
@@ -85,10 +86,112 @@ docker-compose down
 ### To create a visualisation from scratch
 1. Run the regression test, and generate a `.jsonl` file by including 'jsonl' in the '-a'
 2. Upload the `.jsonl` file in the **Get started by adding integrations** section on the home page and press import
-3. Create an Index name to identify the source file and press import
+3. Create an **index name** to identify the source file, do not create **data view**, as we will have to edit the file
 4. When import successful, return back to home page
 
-After ingesting the data, if we want to create a new dashboard from scratch:
+#### [Update API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html)/ [Update By Query API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html#docs-update-by-query-api-desc)
+
+We would like to add **facts_per_second** and **rules_per_second** for comparison  using the two APIs:
+1. Open the side bar
+2. Scroll to bottom, click **Dev Tools** under **Management**
+3. Copy the following code in the console and run it sequentially 
+
+We first convert string values to integer/float: 
+(change the index name **20230714-linux** accordingly)
+
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numFactsProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.numFactsProcessed != null) { ctx._source.numFactsProcessed = Long.parseLong(ctx._source.numFactsProcessed) }", 
+    "lang": "painless"
+  }
+}
+
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numRulesProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.numRulesProcessed != null) { ctx._source.numRulesProcessed = Long.parseLong(ctx._source.numRulesProcessed) }", 
+    "lang": "painless"
+  }
+}
+
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numFactsProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.containsKey('numFactsProcessed') && ctx._source.containsKey('time')) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
+    "lang": "painless"
+  }
+}
+
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numRulesProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.containsKey('numRulesProcessed') && ctx._source.containsKey('time')) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
+    "lang": "painless"
+  }
+}
+```
+
+
+And perform the required calculation:
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "bool": {
+      "filter": [
+        { "exists": { "field": "time" } },
+        { "exists": { "field": "numFactsProcessed" } }
+      ]
+    }
+  },
+  "script": {
+    "source": "ctx._source.facts_per_second = ctx._source.numFactsProcessed / ctx._source.time",
+    "lang": "painless"
+  }
+}
+
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "bool": {
+      "filter": [
+        { "exists": { "field": "time" } },
+        { "exists": { "field": "numRulesProcessed" } }
+      ]
+    }
+  },
+  "script": {
+    "source": "ctx._source.rules_per_second = ctx._source.numRulesProcessed / ctx._source.time",
+    "lang": "painless"
+  }
+}
+```
+
+
+
+After ingesting and editing the data, we want to add the data in Kibana and create a new dashboard:
 1. Open the sidebar, choose **Dashboard** under **Analytics**
 2. Click on **Create dashboard**
    * Under **Select type**, **Aggregation based --> Tag clouds** can be used to display fields directly, e.g., runId, system, architecture, step, stepType...
@@ -114,111 +217,8 @@ Bar charts can be used to visualise and compare performance between different RD
 2. In the **Kibana** section, choose **Saved objects**
 3. Import the dashboard you want
 
-## [Update API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html)/ [Update By Query API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html#docs-update-by-query-api-desc)
 
-The APIs update a document using the specified script.
 
-### Adding "facts_per_second" and "rules_per_second" fields 
-1. Open the side bar
-2. Scroll to bottom, click **Dev Tools** under **Management**
-3. You will see a console
-
-We first convert string values to integer/float:
-
-```sh
-POST /20230714-linux/_update_by_query
-{
-  "query": {
-    "exists": {
-      "field": "numFactsProcessed"
-    }
-  },
-  "script": {
-    "source": "if (ctx._source.numFactsProcessed != null) { ctx._source.numFactsProcessed = Long.parseLong(ctx._source.numFactsProcessed) }", 
-    "lang": "painless"
-  }
-}
-
-```
-
-```sh
-POST /20230714-linux/_update_by_query
-{
-  "query": {
-    "exists": {
-      "field": "numRulesProcessed"
-    }
-  },
-  "script": {
-    "source": "if (ctx._source.numRulesProcessed != null) { ctx._source.numRulesProcessed = Long.parseLong(ctx._source.numRulesProcessed) }", 
-    "lang": "painless"
-  }
-}
-
-```
-
-```sh
-POST /20230714-linux/_update_by_query
-{
-  "query": {
-    "exists": {
-      "field": "numFactsProcessed"
-    }
-  },
-  "script": {
-    "source": "if (ctx._source.containsKey('numFactsProcessed') && ctx._source.containsKey('time')) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
-    "lang": "painless"
-  }
-}
-```
-```sh
-POST /20230714-linux/_update_by_query
-{
-  "query": {
-    "exists": {
-      "field": "numRulesProcessed"
-    }
-  },
-  "script": {
-    "source": "if (ctx._source.containsKey('numRulesProcessed') && ctx._source.containsKey('time')) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
-    "lang": "painless"
-  }
-}
-```
-```sh
-POST /20230714-linux/_update_by_query
-{
-  "query": {
-    "bool": {
-      "filter": [
-        { "exists": { "field": "time" } },
-        { "exists": { "field": "numFactsProcessed" } }
-      ]
-    }
-  },
-  "script": {
-    "source": "ctx._source.facts_per_second = ctx._source.numFactsProcessed / ctx._source.time",
-    "lang": "painless"
-  }
-}
-```
-```sh
-POST /20230714-linux/_update_by_query
-{
-  "query": {
-    "bool": {
-      "filter": [
-        { "exists": { "field": "time" } },
-        { "exists": { "field": "numRulesProcessed" } }
-      ]
-    }
-  },
-  "script": {
-    "source": "ctx._source.rules_per_second = ctx._source.numRulesProcessed / ctx._source.time",
-    "lang": "painless"
-  }
-}
-```
 
 ## Miscellaneous
 
