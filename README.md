@@ -12,7 +12,7 @@
      * [Tag Clouds](#tag-clouds)
      * [Grouped bar charts](#grouped-bar-charts)
    * [If you have a saved dashboard `.ndjson` and a different `.jsonl` file](#if-you-have-a-saved-dashboard-ndjson-and-a-different-jsonl-file)
-5. [Update API](#update-api)
+5. [Update API/Update By Query API](#update-api-update-by-query-api)
 6. [Miscellaneous](#miscellaneous)
    * [Filtering data](#filtering-data)
    * [Formatting numbers](#formatting-numbers)
@@ -114,7 +114,77 @@ Bar charts can be used to visualise and compare performance between different RD
 2. In the **Kibana** section, choose **Saved objects**
 3. Import the dashboard you want
 
-## Update API
+## [Update API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html)/ [Update By Query API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html#docs-update-by-query-api-desc)
+
+The APIs update a document using the specified script.
+
+### Adding "facts_per_second" and "rules_per_second" fields 
+1. Open the side bar
+2. Scroll to bottom, click **Dev Tools** under **Management**
+3. You will see a console
+
+We first convert string values to integer/float:
+
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numFactsProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.numFactsProcessed != null) { ctx._source.numFactsProcessed = Long.parseLong(ctx._source.numFactsProcessed) }", 
+    "lang": "painless"
+  }
+}
+
+```
+
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numRulesProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.numRulesProcessed != null) { ctx._source.numRulesProcessed = Long.parseLong(ctx._source.numRulesProcessed) }", 
+    "lang": "painless"
+  }
+}
+
+```
+
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numFactsProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.containsKey('numFactsProcessed') && ctx._source.containsKey('time')) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
+    "lang": "painless"
+  }
+}
+```
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numRulesProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.containsKey('numRulesProcessed') && ctx._source.containsKey('time')) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
+    "lang": "painless"
+  }
+}
+```
 
 ```sh
 # Create the index 'my_index'
