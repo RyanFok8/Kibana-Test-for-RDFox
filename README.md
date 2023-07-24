@@ -185,6 +185,40 @@ POST /20230714-linux/_update_by_query
   }
 }
 ```
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "bool": {
+      "filter": [
+        { "exists": { "field": "time" } },
+        { "exists": { "field": "numFactsProcessed" } }
+      ]
+    }
+  },
+  "script": {
+    "source": "ctx._source.facts_per_second = ctx._source.numFactsProcessed / ctx._source.time",
+    "lang": "painless"
+  }
+}
+```
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "bool": {
+      "filter": [
+        { "exists": { "field": "time" } },
+        { "exists": { "field": "numRulesProcessed" } }
+      ]
+    }
+  },
+  "script": {
+    "source": "ctx._source.rules_per_second = ctx._source.numRulesProcessed / ctx._source.time",
+    "lang": "painless"
+  }
+}
+```
 
 ```sh
 # Create the index 'my_index'
