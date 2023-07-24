@@ -8,12 +8,12 @@
    * [macOS](#macos)
 3. [Quit/Cleanup](#quitcleanup)
 4. [Getting started](#getting-started)
+   * [Update API/Update By Query API](#update-api-update-by-query-api)
    * [To create a visualisation from scratch](#to-create-a-visualisation-from-scratch)
-     * [Update API/Update By Query API](#update-api-update-by-query-api)
      * [Tag Clouds](#tag-clouds)
      * [Grouped bar charts](#grouped-bar-charts)
-   * [If you have a saved dashboard `.ndjson` and a different `.jsonl` file](#if-you-have-a-saved-dashboard-ndjson-and-a-different-jsonl-file)
-5. [Miscellaneous](#miscellaneous)
+   * [If you have a saved dashboard `.ndjson`](#if-you-have-a-saved-dashboard-ndjson)
+6. [Miscellaneous](#miscellaneous)
    * [Filtering data](#filtering-data)
    * [Formatting numbers](#formatting-numbers)
    * [Importing and exporting Dashboards `.ndjson`](#importing-and-exporting-dashboards-ndjson)
@@ -83,13 +83,12 @@ docker-compose down -v
 ## Getting started
 **Note index patterns has been renamed to data views
 
-### To create a visualisation from scratch
 1. Run the regression test, and generate a `.jsonl` file by including 'jsonl' in the '-a'
 2. Upload the `.jsonl` file in the **Get started by adding integrations** section on the home page and press import
 3. Create an **index name** to identify the source file, do not create **data view**, as we will have to edit the file
 4. When import successful, return back to home page
 
-#### [Update API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html)/ [Update By Query API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html#docs-update-by-query-api-desc)
+### [Update API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html)/ [Update By Query API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html#docs-update-by-query-api-desc)
 
 We would like to add **facts_per_second** and **rules_per_second** for comparison  using the two APIs:
 1. Open the side bar
@@ -189,11 +188,13 @@ POST /20230714-linux/_update_by_query
 }
 ```
 
-
-
+### To create a visualisation from scratch
 After ingesting and editing the data, we want to add the data in Kibana and create a new dashboard:
-1. Open the sidebar, choose **Dashboard** under **Analytics**
-2. Click on **Create dashboard**
+1. Open the sidebar, click **Management**
+2. Under **Kibana**, choose **Data Views**
+3. Create a new data view by choosing the index pattern you have defined earlier, the name and index pattern could be the same
+4. After adding it to Kibana, click **Dashboard** under **Analytics** in the side bar
+5. Click on **Create dashboard**
    * Under **Select type**, **Aggregation based --> Tag clouds** can be used to display fields directly, e.g., runId, system, architecture, step, stepType...
    * While **Lens** can be used to analyse numbers through bar chart, pie graph..., with different aggregations (count, median, average...)
 
@@ -207,12 +208,17 @@ Tag clouds are used to display fields directly, if you want to display all the s
 - Press **Save and Return** on the upper right and the visualisation will be displayed on the dashboard
 
 #### Grouped bar charts
-Bar charts can be used to visualise and compare performance between different RDFox versions
+Bar charts can be used to visualise and compare performance between different RDFox versions, e.g., if we want to have a bar chart comparing facts_per_second for every test(LUBM-10, SUP-140...):
+- **Select type --> Lens** and drag the required fields into the display
+- Choose the appropriate **Visualisation type** and function (median, average...)
+- To turn from a bar chart to grouped bar chart, we add a field in the **Breakdown**, on the right hand side
+- Choose **Filters**, and filter out the 3 RDFox versions
+- We can compare different tests by clicking the **horizontal axis** and filter out different test names
+
+**Right next to visualisation type, there are settings to modify the bar chart, e.g., adding labels, scaling of x-axis and y-axis...
 
 
-
-
-### If you have a saved dashboard `.ndjson` and a different `.jsonl` file
+### If you have a saved dashboard `.ndjson`
 1. Open the sidebar, scroll to the bottom, and click **Management**
 2. In the **Kibana** section, choose **Saved objects**
 3. Import the dashboard you want
