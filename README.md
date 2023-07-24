@@ -115,6 +115,28 @@ Bar charts can be used to visualise and compare performance between different RD
 3. Import the dashboard you want
 
 ## Update API
+
+```sh
+# Create the index 'my_index'
+PUT /my_index
+
+# Index a document with ID '1' into 'my_index'
+POST /my_index/_doc/1
+{
+  "name": "John Doe",
+  "age": 30,
+  "city": "New York"
+}
+
+# Update the 'city' field of the document with ID '1'
+POST /my_index/_update/1
+{
+  "doc": {
+    "city": "San Francisco"
+  }
+}
+```
+
 The API provides ... 
 
 Open console bla bla
@@ -150,28 +172,58 @@ so the document will look like this:
   "monthly_salary": 4166.666666666667
 }
 ```
-To add a field "rate" to the documents in the "my_index" index when both "time" and "distance" exist, with the value calculated as "distance / time", you can use the Elasticsearch Update API with a Painless script. The script will check if both "time" and "distance" fields exist in the document and then perform the calculation to add the "rate" field.
+To add a field "rate" to the documents in the "my_index" index when both "time" and "distance" exist, with the value calculated as "distance / time", you can use the Elasticsearch Update By Query API with a Painless script. The script will check if both "time" and "distance" fields exist in the document and then perform the calculation to add the "rate" field.
 ```sh
-POST /my_index/_update_by_query
+POST /20230714-linux/_update_by_query
 {
   "query": {
     "bool": {
       "filter": [
         { "exists": { "field": "time" } },
-        { "exists": { "field": "distance" } }
+        { "exists": { "field": "numRulesProcessed" } }
       ]
     }
   },
   "script": {
-    "source": "ctx._source.rate = ctx._source.distance / ctx._source.time",
+    "source": "ctx._source.rate = ctx._source.numRulesProcessed / ctx._source.time",
     "lang": "painless"
   }
 }
 ```
 In this example, we used the Update By Query API with a Painless script to add the "rate" field to the documents where both "time" and "distance" fields exist. The "query" section of the JSON payload uses a "bool" query with two "exists" queries to filter documents that have both "time" and "distance" fields.
 
-The "script" section of the JSON payload contains the Painless script to calculate the "rate" field by dividing the "distance" by the "time" and then adding the "rate" field to the document.
+OR 
 
+This is string to integer
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numFactsProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.numFactsProcessed != null) { ctx._source.numFactsProcessed = Long.parseLong(ctx._source.numFactsProcessed) }", 
+    "lang": "painless"
+  }
+}
+
+```
+```sh
+POST /20230714-linux/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numFactsProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.containsKey('numFactsProcessed') && ctx._source.containsKey('time')) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
+    "lang": "painless"
+  }
+}
+```
 ## Miscellaneous
 
 ### Filtering data
