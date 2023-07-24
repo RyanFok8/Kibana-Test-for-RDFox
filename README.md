@@ -1,6 +1,4 @@
 # Using Kibana to visualise RDFox performance regression test
-**remember to add license
-
 ## Contents
 1. [Requirements](#requirements)
 2. [Setting up](#setting-up)
