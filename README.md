@@ -298,3 +298,26 @@ some drafts:
 https://www.youtube.com/watch?v=5giacrHVYe4
 https://www.elastic.co/blog/custom-vega-visualizations-in-kibana
 https://afivan.com/2021/11/09/elastic-search-data-visualization-with-kibana-how-to-create-a-scatter-plot-with-vega-lite/
+```sh
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "values": [
+      {"Version": 1, "step": "query10", "time": 10.3},
+      {"Version": 2, "step": "query10", "time": 10.4},
+      {"Version": 1, "step": "query11", "time": 9.6},
+      {"Version": 2, "step": "query11", "time": 9.5}
+    ]
+  },
+  "transform": [
+    {"filter": "datum.Version === 1 || datum.Version === 2"},
+    {"pivot": "step", "value": "time", "groupby": ["Version"]}
+  ],
+  "mark": {"type": "point", "tooltip": {"content": "data"}},
+  "encoding": {
+    "x": {"field": "query10", "type": "quantitative", "title": "Time in Version 2"},
+    "y": {"field": "query11", "type": "quantitative", "title": "Time in Version 1"},
+    "color": {"field": "Version", "type": "nominal", "title": "Version"}
+  }
+}
+```
