@@ -329,3 +329,29 @@ https://afivan.com/2021/11/09/elastic-search-data-visualization-with-kibana-how-
   }
 }
 ```
+```sh
+{
+  $schema: https://vega.github.io/schema/vega-lite/v5.json
+  title: RDFox Compare
+  "mark": {"type": "point", "tooltip": {"content": "data"}},
+  data: {
+    url: {
+      %context%: true
+      index: scatter
+      body: {
+        size: 10000
+        _source: ["rdfox_version", "time", "repetition_id", "runId", "step", "stepType", "system", "architecture", "test_name"]
+      }
+    }
+    format: {property: "hits.hits"}
+  }
+  "transform":[
+    {"pivot": "_source.rdfox_version", "value": "_source.time", "groupby": ["_source.step", "_source.test_name"]}
+  ]
+  
+  encoding: {
+    x: {field: "3.1.1", type: "quantitative", title: "Version 3.1.1"}
+    y: {field: "6.2", type: "quantitative", title: "Version 6.2"}
+  }
+}
+```
