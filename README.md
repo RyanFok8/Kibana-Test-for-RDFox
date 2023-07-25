@@ -303,19 +303,19 @@ https://afivan.com/2021/11/09/elastic-search-data-visualization-with-kibana-how-
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "data": {
     "values": [
-      {"test": 12, "Version": "1", "stepType": "query", "step": "query10", "time": 10},
-      {"test": 12, "Version": "1", "stepType": "exception", "message": "nope"},
-      {"test": 12, "Version": "2", "stepType": "query", "step": "query10", "time": 11},
-      {"test": 12, "Version": "3", "stepType": "query", "step": "query10", "time": 4},
-      {"test": 12, "Version": "1", "stepType": "query", "step": "query11", "time": 9.3},
-      {"test": 12, "Version": "2", "stepType": "query", "step": "query11", "time": 9.6},
-      {"test": 12, "Version": "3", "stepType": "query", "step": "query11", "time": 6.5},
-      {"test": 13, "Version": "1", "stepType": "query", "step": "query10", "time": 10.3},
-      {"test": 13, "Version": "2", "stepType": "query", "step": "query10", "time": 10.4},
-      {"test": 13, "Version": "3", "stepType": "query", "step": "query10", "time": 5},
-      {"test": 13, "Version": "1", "stepType": "query", "step": "query11", "time": 9.6},
-      {"test": 13, "Version": "2", "stepType": "query", "step": "query11", "time": 9.5},
-      {"test": 13, "Version": "3", "stepType": "query", "step": "query11", "time": 6}
+      {"test": "ESWC2018", "Version": "1", "stepType": "query", "step": "query10", "time": "10"},
+      {"test": "ESWC2018", "Version": "1", "stepType": "import", "step": "import-ttl", "time": "10"},
+      {"test": "ESWC2018", "Version": "1", "stepType": "query", "step": "query11", "time": "9.5"},
+      {"test": "ESWC2018", "Version": "2", "stepType": "query", "step": "query10", "time": "11"},
+      {"test": "ESWC2018", "Version": "2", "stepType": "query", "step": "query11", "time": "10.3"},
+      {"test": "ESWC2018", "Version": "3", "stepType": "query", "step": "query10", "time": "4"},
+      {"test": "ESWC2018", "Version": "3", "stepType": "query", "step": "query11", "time": "6.5"},
+      {"test": "LUBM-10", "Version": "1", "stepType": "query", "step": "query10", "time": "5.3"},
+      {"test": "LUBM-10", "Version": "1", "stepType": "query", "step": "query11", "time": "4.6"},
+      {"test": "LUBM-10", "Version": "2", "stepType": "query", "step": "query10", "time": "5.4"},
+      {"test": "LUBM-10", "Version": "2", "stepType": "query", "step": "query11", "time": "4.5"},
+      {"test": "LUBM-10", "Version": "3", "stepType": "query", "step": "query10", "time": "5"},
+      {"test": "LUBM-10", "Version": "3", "stepType": "query", "step": "query11", "time": "6"}
     ]
   },
   "transform": [
@@ -325,8 +325,7 @@ https://afivan.com/2021/11/09/elastic-search-data-visualization-with-kibana-how-
   "mark": {"type": "point", "tooltip": {"content": "data"}},
   "encoding": {
     "x": {"field": "1", "type": "quantitative", "title": "Time in Version 2"},
-    "y": {"field": "2", "type": "quantitative", "title": "Time in Version 1"},
-    "color": {"field": "Version", "type": "nominal", "title": "Version"}
+    "y": {"field": "2", "type": "quantitative", "title": "Time in Version 1"}
   }
 }
 ```
