@@ -303,20 +303,29 @@ https://afivan.com/2021/11/09/elastic-search-data-visualization-with-kibana-how-
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "data": {
     "values": [
-      {"Version": 1, "step": "query10", "time": 10.3},
-      {"Version": 2, "step": "query10", "time": 10.4},
-      {"Version": 1, "step": "query11", "time": 9.6},
-      {"Version": 2, "step": "query11", "time": 9.5}
+      {"test": 12, "Version": "1", "stepType": "query", "step": "query10", "time": 10},
+      {"test": 12, "Version": "1", "stepType": "exception", "message": "nope"},
+      {"test": 12, "Version": "2", "stepType": "query", "step": "query10", "time": 11},
+      {"test": 12, "Version": "3", "stepType": "query", "step": "query10", "time": 4},
+      {"test": 12, "Version": "1", "stepType": "query", "step": "query11", "time": 9.3},
+      {"test": 12, "Version": "2", "stepType": "query", "step": "query11", "time": 9.6},
+      {"test": 12, "Version": "3", "stepType": "query", "step": "query11", "time": 6.5},
+      {"test": 13, "Version": "1", "stepType": "query", "step": "query10", "time": 10.3},
+      {"test": 13, "Version": "2", "stepType": "query", "step": "query10", "time": 10.4},
+      {"test": 13, "Version": "3", "stepType": "query", "step": "query10", "time": 5},
+      {"test": 13, "Version": "1", "stepType": "query", "step": "query11", "time": 9.6},
+      {"test": 13, "Version": "2", "stepType": "query", "step": "query11", "time": 9.5},
+      {"test": 13, "Version": "3", "stepType": "query", "step": "query11", "time": 6}
     ]
   },
   "transform": [
-    {"filter": "datum.Version === 1 || datum.Version === 2"},
-    {"pivot": "step", "value": "time", "groupby": ["Version"]}
+    {"filter": "datum.stepType === 'query'"},
+    {"pivot": "Version", "value": "time", "groupby": ["step", "test"]}
   ],
   "mark": {"type": "point", "tooltip": {"content": "data"}},
   "encoding": {
-    "x": {"field": "query10", "type": "quantitative", "title": "Time in Version 2"},
-    "y": {"field": "query11", "type": "quantitative", "title": "Time in Version 1"},
+    "x": {"field": "1", "type": "quantitative", "title": "Time in Version 2"},
+    "y": {"field": "2", "type": "quantitative", "title": "Time in Version 1"},
     "color": {"field": "Version", "type": "nominal", "title": "Version"}
   }
 }
