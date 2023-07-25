@@ -380,3 +380,19 @@ https://afivan.com/2021/11/09/elastic-search-data-visualization-with-kibana-how-
   }
 }
 ```
+```sh
+POST /your_index/_delete_by_query
+{
+  "query": {
+    "bool": {
+      "must_not": [
+        {
+          "term": {
+            "stepType": "query"
+          }
+        }
+      ]
+    }
+  }
+}
+```
