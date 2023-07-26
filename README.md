@@ -11,7 +11,7 @@
      * [Tag Clouds](#tag-clouds)
      * [Grouped bar charts](#grouped-bar-charts)
      * [Filtering data](#filtering-data)
-   * [Vega-Lite for scatter plot](vega-lite-for-scatter-plot)
+   * [Vega Lite for scatter plot](vega-lite-for-scatter-plot)
    * [If you have a saved dashboard `.ndjson`](#if-you-have-a-saved-dashboard-ndjson)
 6. [Others](#others)
    * [Formatting numbers](#formatting-numbers)
@@ -221,7 +221,7 @@ In order to filter data to a specific system, or a specific test name, you can e
 1. Use Kibana Query Language (KQL) on the upper bar
 2. Click on a specific tag clouds
 
-### Vega-Lite for scatter plot
+### Vega Lite for scatter plot
 There is no build-in scatter plot graph type so we will have to create from scratch using a high level visualisation grammar called [Vega-Lite](https://vega.github.io/vega-lite/). To open the Vega editor, when creating a new visualisation, choose **Custom visualisation** this time.
 Before writing any code in the editor, we will have to edit our jsonl file first.
 
