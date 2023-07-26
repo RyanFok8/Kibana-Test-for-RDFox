@@ -396,3 +396,16 @@ POST /your_index/_delete_by_query
   }
 }
 ```
+```sh
+POST /20230725-linux-query/_update_by_query
+{
+  "query": {
+    "match": {
+      "rdfox_version": "3.1.1"
+    }
+  },
+  "script": {
+    "source": "ctx._source.rdfox_version = \"oldest\""
+  }
+}
+```
