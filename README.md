@@ -409,3 +409,30 @@ POST /20230725-linux-query/_update_by_query
   }
 }
 ```
+
+Worked code:
+```sh
+{
+  $schema: https://vega.github.io/schema/vega-lite/v5.json
+  title: RDFox
+  "mark": {"type": "point", "tooltip": {"content": "data"}},
+  data: {
+    url: {
+      %context%: true
+      index: 20230725-linux-query
+      body: {
+        size: 10000
+        _source: ["test_name", "rdfox_version", "step", "stepType", "time", "repetition_id"]
+      }
+    }
+    format: {property: "hits.hits"}
+  }
+  "transform": [
+    {"pivot": "_source.rdfox_version", "value": "_source.time", "groupby": ["_source.step", "_source.test_name", "_source.repetition_id"]}
+  ],
+  "encoding": {
+    "x": {"field": "previous", "type": "quantitative", "title": "Time in Version 1"},
+    "y": {"field": "latest", "type": "quantitative", "title": "Time in Version 2"}
+  }
+}
+```
