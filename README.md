@@ -10,9 +10,10 @@
    * [To create a visualisation from scratch](#to-create-a-visualisation-from-scratch)
      * [Tag Clouds](#tag-clouds)
      * [Grouped bar charts](#grouped-bar-charts)
+     * [Filtering data](#filtering-data)
+   * [Vega-Lite for scatter plot](vegalite-for-scatter-plot)
    * [If you have a saved dashboard `.ndjson`](#if-you-have-a-saved-dashboard-ndjson)
-6. [Miscellaneous](#miscellaneous)
-   * [Filtering data](#filtering-data)
+6. [Others](#others)
    * [Formatting numbers](#formatting-numbers)
    * [Importing and exporting Dashboards `.ndjson`](#importing-and-exporting-dashboards-ndjson)
    * [Combining data views/index patterns](#combining-data-viewsindex-patterns)
@@ -215,6 +216,92 @@ Bar charts can be used to visualise and compare performance between different RD
 
 **Right next to visualisation type, there are settings to modify the bar chart, e.g., adding labels, scaling of x-axis and y-axis...
 
+#### Filtering data
+In order to filter data to a specific system, or a specific test name, you can either:
+1. Use Kibana Query Language (KQL) on the upper bar
+2. Click on a specific tag clouds
+
+### Vega-Lite for scatter plot
+There is no build-in scatter plot graph type so we will have to create from scratch using a high level visualisation grammar called [Vega-Lite](https://vega.github.io/vega-lite/). To open the Vega editor, when creating a new visualisation, choose **Custom visualisation** this time.
+Before writing any code in the editor, we will have to edit our jsonl file first.
+
+Upload a new copy of jsonl file, and filter out those data who is not query in the console: (change your index name accordingly)
+
+```sh
+POST /your_index/_delete_by_query
+{
+  "query": {
+    "bool": {
+      "must_not": [
+        {
+          "term": {
+            "stepType": "query"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+We then change the 3 rdfox_versions to "oldest", "previous", "latest" respectively as we will have to do [pivot transform](https://vega.github.io/vega-lite/docs/pivot.html) later on.
+Format:
+```sh
+POST /20230725-linux-query/_update_by_query
+{
+  "query": {
+    "match": {
+      "rdfox_version": "3.1.1"
+    }
+  },
+  "script": {
+    "source": "ctx._source.rdfox_version = \"oldest\""
+  }
+}
+```
+And edit the repetition id to (#01, #02, #03) as we have to group queries results by repetition id later on:
+
+```sh
+curl -X POST "http://localhost:9200/your_index/_update_by_query" -H 'Content-Type: application/json' -d '
+{
+  "query": {
+    "match_all": {}
+  },
+  "script": {
+    "source": "ctx._source.repetition_id = ctx._source.repetition_id.substring(ctx._source.repetition_id.length() - 3)"
+  }
+}'
+```
+
+The data is now in the format that we want. Reopen the Vega editor and paste the following code:
+
+``` sh
+{
+  $schema: https://vega.github.io/schema/vega-lite/v5.json
+  title: RDFox 
+  "mark": {"type": "point", "tooltip": {"content": "data"}}, 
+  data: {
+    url: {
+      %context%: true
+      index: 20230725-linux-query
+      body: {
+        size: 10000
+        _source: ["test_name", "rdfox_version", "step", "stepType", "time", "repetition_id"]
+      }
+    }
+    format: {property: "hits.hits"}
+  }
+  "transform": [
+    {"pivot": "_source.rdfox_version", "value": "_source.time", "groupby": ["_source.step", "_source.test_name", "_source.repetition_id"]}
+  ], 
+  "encoding": {
+    "x": {"field": "previous", "type": "quantitative", "title": "Time in Version 1"},
+    "y": {"field": "latest", "type": "quantitative", "title": "Time in Version 2"}
+  }
+}
+```
+
+
+
 
 ### If you have a saved dashboard `.ndjson`
 1. Open the sidebar, scroll to the bottom, and click **Management**
@@ -224,10 +311,8 @@ Bar charts can be used to visualise and compare performance between different RD
 
 
 
-## Miscellaneous
+## Others
 
-### Filtering data
-click tag clouds or KQL
 
 ### Formatting numbers
 If you want to change the presentation of numbers in visualisation, e.g., to the nearest integer, to 3 decimal places...
