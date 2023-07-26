@@ -136,7 +136,7 @@ POST /20230714-linux/_update_by_query
   }
 }
 
-POST /20230714-linux/_update_by_query
+POST /20230725-linux/_update_by_query
 {
   "query": {
     "exists": {
@@ -144,7 +144,7 @@ POST /20230714-linux/_update_by_query
     }
   },
   "script": {
-    "source": "if (ctx._source.containsKey('numRulesProcessed') && ctx._source.containsKey('time')) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
+    "source": "if (ctx._source.containsKey('numRulesProcessed') && ctx._source.containsKey('time') && ctx._source.time instanceof String) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
     "lang": "painless"
   }
 }
