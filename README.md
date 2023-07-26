@@ -11,7 +11,7 @@
      * [Tag Clouds](#tag-clouds)
      * [Grouped bar charts](#grouped-bar-charts)
      * [Filtering data](#filtering-data)
-   * [Vega-Lite for scatter plot](vegalite-for-scatter-plot)
+   * [Vega-Lite for scatter plot](vega-lite-for-scatter-plot)
    * [If you have a saved dashboard `.ndjson`](#if-you-have-a-saved-dashboard-ndjson)
 6. [Others](#others)
    * [Formatting numbers](#formatting-numbers)
