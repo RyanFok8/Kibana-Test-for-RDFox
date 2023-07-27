@@ -261,7 +261,7 @@ POST /20230725-linux-query/_update_by_query
 And edit the repetition id to (#01, #02, #03) as we have to group queries results by repetition id later on:
 
 ```sh
-curl -X POST "http://localhost:9200/your_index/_update_by_query" -H 'Content-Type: application/json' -d '
+POST /your_index/_update_by_query
 {
   "query": {
     "match_all": {}
@@ -269,7 +269,7 @@ curl -X POST "http://localhost:9200/your_index/_update_by_query" -H 'Content-Typ
   "script": {
     "source": "ctx._source.repetition_id = ctx._source.repetition_id.substring(ctx._source.repetition_id.length() - 3)"
   }
-}'
+}
 ```
 
 The data is now in the format that we want. Reopen the Vega editor and paste the following code:
