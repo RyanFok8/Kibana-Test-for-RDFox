@@ -149,7 +149,20 @@ POST /20230725-win64/_update_by_query
     "lang": "painless"
   }
 }
+POST /20230725-win64/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numRulesProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.time == 0.0) { ctx._source.time = 0.001 }", 
+    "lang": "painless"
+  }
+}
 ```
+
 And perform the required calculation:
 ```sh
 POST /20230714-linux/_update_by_query
