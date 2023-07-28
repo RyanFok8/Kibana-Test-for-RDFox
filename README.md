@@ -506,3 +506,17 @@ Worked code:
   }
 }
 ```
+```sh
+POST /20230725-win64/_update_by_query
+{
+  "query": {
+    "exists": {
+      "field": "numFactsProcessed"
+    }
+  },
+  "script": {
+    "source": "if (ctx._source.time == 0.0) { ctx._source.time = 0.001 }", 
+    "lang": "painless"
+  }
+}
+```
