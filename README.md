@@ -124,28 +124,13 @@ POST /20230714-linux/_update_by_query
   }
 }
 
-POST /20230714-linux/_update_by_query
-{
-  "query": {
-    "exists": {
-      "field": "numFactsProcessed"
-    }
-  },
-  "script": {
-    "source": "if (ctx._source.containsKey('numFactsProcessed') && ctx._source.containsKey('time')) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
-    "lang": "painless"
-  }
-}
-
 POST /20230725-linux/_update_by_query
 {
   "query": {
-    "exists": {
-      "field": "numRulesProcessed"
-    }
+    "match_all": {}
   },
   "script": {
-    "source": "if (ctx._source.containsKey('numRulesProcessed') && ctx._source.containsKey('time') && ctx._source.time instanceof String) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
+    "source": "if (ctx._source.containsKey('time') && ctx._source.time instanceof String) { ctx._source.time = Double.parseDouble(ctx._source.time) }",
     "lang": "painless"
   }
 }
