@@ -86,11 +86,11 @@ docker-compose down -v
 1. Run the regression test, and generate a `.jsonl` file by including 'jsonl' in the '-a'
 2. Upload the `.jsonl` file in the **Get started by adding integrations** section on the home page and press import
 3. Create an **index name** to identify the source file, do not create **data view**, as we will have to edit the file
-4. When import successful, return back to home page
+4. When import successful, return back to the home page and import the second file with a different system
 
 ### [Update API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html)/ [Update By Query API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html#docs-update-by-query-api-desc)
 
-We would like to add **facts_per_second** and **rules_per_second** for comparison  using the two APIs:
+We would like to add **facts_per_second** and **rules_per_second** for comparison using the two APIs:
 1. Open the side bar
 2. Scroll to bottom, click **Dev Tools** under **Management**
 3. Copy the following code in the console and run it sequentially 
@@ -107,7 +107,7 @@ POST /your_index/_update_by_query
     }
   },
   "script": {
-    "source": "if (ctx._source.numFactsProcessed != null) { ctx._source.numFactsProcessed = Long.parseLong(ctx._source.numFactsProcessed) }", 
+    "source": "if (ctx._source.numFactsProcessed != null) { ctx._source.numFactsProcessed = Long.parseLong(ctx._source.numFactsProcessed)}", 
     "lang": "painless"
   }
 }
@@ -204,8 +204,9 @@ After ingesting and editing the data, we want to add the data in Kibana and crea
 1. Open the sidebar, click **Management**
 2. Under **Kibana**, choose **Data Views**
 3. Create a new data view by choosing the index pattern you have defined earlier, the name and index pattern could be the same
-4. After adding it to Kibana, click **Dashboard** under **Analytics** in the side bar
-5. Click on **Create dashboard**
+4. You can also combine two data views (e.g., different systems) by adding more than one index patterns in the **index patterns**, seperating them using comma
+5. After adding it to Kibana, click **Dashboard** under **Analytics** in the side bar
+6. Click on **Create dashboard**
    * Under **Select type**, **Aggregation based --> Tag clouds** can be used to display fields directly, e.g., runId, system, architecture, step, stepType...
    * While **Lens** can be used to analyse numbers through bar chart, pie graph..., with different aggregations (count, median, average...)
 
