@@ -377,12 +377,9 @@ If you want to change the presentation of numbers in visualisation, e.g., to the
 
 ### Importing and exporting Dashboards `.ndjson`
 1. Go to **Management**, and click **Saved objects** under **Kibana**
-2. For import:
-   * lll
-   * lll
-3. For export:
-   * lll
-   * lll
+2. There is an **Import object** button on the top right corner
+3. Or you can click a specific object and export it as `.ndjson` file
+
 ### Combining data views/index patterns
 1. Go to **Management**, click **Data Views** in **Kibana**
 2. Click **Create data view**
