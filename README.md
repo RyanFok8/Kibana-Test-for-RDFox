@@ -96,7 +96,7 @@ We would like to add **facts_per_second** and **rules_per_second** for compariso
 3. Copy the following code in the console and run it sequentially 
 
 We first convert string values to integer/float: 
-(change the index name **20230714-linux** accordingly)
+(change **your_index** accordingly)
 
 ```sh
 POST /your_index/_update_by_query
