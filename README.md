@@ -302,11 +302,15 @@ The data is now in the format that we want. Reopen the Vega editor and paste the
     format: {property: "hits.hits"}
   }
   "transform": [
-    {"pivot": "_source.rdfox_version", "value": "_source.time", "groupby": ["_source.step", "_source.test_name", "_source.repetition_id"]}
+    {"pivot": "_source.rdfox_version", "value": "_source.time", "groupby": ["_source.step", "_source.test_name", "_source.repetition_id"]}, 
+    {"aggregate": [
+      {"op": "mean", "field": "oldest", "as": "mean_oldest"},
+      {"op": "mean", "field": "previous", "as": "mean_previous"},
+      {"op": "mean", "field": "latest", "as": "mean_latest"}], "groupby": ["_source.step", "_source.test_name"]},
   ], 
   "encoding": {
-    "x": {"field": "previous", "type": "quantitative", "title": "Time in Version 1"},
-    "y": {"field": "latest", "type": "quantitative", "title": "Time in Version 2"}
+    "x": {"field": "mean_previous", "type": "quantitative", "title": "Time in Version 1"},
+    "y": {"field": "mean_latest", "type": "quantitative", "title": "Time in Version 2"}
   }
 }
 ```
