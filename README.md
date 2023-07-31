@@ -12,6 +12,7 @@
      * [Grouped bar charts](#grouped-bar-charts)
      * [Filtering data](#filtering-data)
    * [Vega-Lite for scatter plot](#vega-lite-for-scatter-plot)
+     * [Reference](#reference)
    * [If you have a saved dashboard `.ndjson`](#if-you-have-a-saved-dashboard-ndjson)
 6. [Others](#others)
    * [Formatting numbers](#formatting-numbers)
@@ -314,7 +315,42 @@ The data is now in the format that we want. Reopen the Vega editor and paste the
   }
 }
 ```
+#### Reference
+* [Pivot Transform](https://vega.github.io/vega-lite/docs/pivot.html)
+* [Aggregation](https://vega.github.io/vega-lite/docs/aggregate.html)
+* [Formatting of numbers](https://vega.github.io/vega-lite/docs/format.html)
 
+You can also try visualisation of data on a smaller scale in the [Vega-Lite online editor](https://vega.github.io/editor/#/), where in the **Data Viewer**, you can see the transformation of data in table form (**source** and **data**):
+
+```sh
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "values": [
+      {"test": "ESWC2018", "Version": "1", "stepType": "query", "step": "query10", "time": "10"},
+      {"test": "ESWC2018", "Version": "1", "stepType": "query", "step": "query11", "time": "9.5"},
+      {"test": "ESWC2018", "Version": "2", "stepType": "query", "step": "query10", "time": "11"},
+      {"test": "ESWC2018", "Version": "2", "stepType": "query", "step": "query11", "time": "10.3"},
+      {"test": "ESWC2018", "Version": "3", "stepType": "query", "step": "query10", "time": "4"},
+      {"test": "ESWC2018", "Version": "3", "stepType": "query", "step": "query11", "time": "6.5"},
+      {"test": "LUBM-10", "Version": "1", "stepType": "query", "step": "query10", "time": "5.3"},
+      {"test": "LUBM-10", "Version": "1", "stepType": "query", "step": "query11", "time": "4.6"},
+      {"test": "LUBM-10", "Version": "2", "stepType": "query", "step": "query10", "time": "5.4"},
+      {"test": "LUBM-10", "Version": "2", "stepType": "query", "step": "query11", "time": "4.5"},
+      {"test": "LUBM-10", "Version": "3", "stepType": "query", "step": "query10", "time": "5"},
+      {"test": "LUBM-10", "Version": "3", "stepType": "query", "step": "query11", "time": "6"}
+    ]
+  },
+  "transform": [
+    {"pivot": "Version", "value": "time", "groupby": ["step", "test"]}
+  ],
+  "mark": {"type": "point", "tooltip": {"content": "data"}},
+  "encoding": {
+    "x": {"field": "1", "type": "quantitative", "title": "Time in Version 2"},
+    "y": {"field": "2", "type": "quantitative", "title": "Time in Version 1"}
+  }
+}
+```
 
 
 
@@ -353,200 +389,3 @@ If you want to change the presentation of numbers in visualisation, e.g., to the
 ### Double checking the basic license
 1. Go to **Management** and scroll to the bottom
 2. Click on **License Management** and it should show **Your Basic license is active**
-
-
-
-
-
-
-some drafts:
-- breakdown for grouped bar charts
-- tag clouds in aggregation to show ids, system...
-- apply filters
-
-
-
-## vega
-
-```sh
-{
-  $schema: https://vega.github.io/schema/vega-lite/v5.json
-  title: Country fertility representation
-  mark: {"type": "point", "tooltip": true}
-  data: {
-    url: {
-      %context%: true
-      index: scatter
-      body: {
-        size: 10000
-        _source: ["country", "lifeExpectancy", "fertility"]
-      }
-    }
-    format: {property: "hits.hits"}
-  }
-  encoding: {
-    x: {field: "_source.lifeExpectancy", type: "quantitative", title: "Life Expectancy"}
-    y: {field: "_source.fertility", type: "quantitative", title: "Fertility"}
-    tooltip: [
-      {"field": "_source.country", "type": "nominal", "title": "Country"}
-      {"field": "_source.lifeExpectancy", "type": "nominal", "title": "Life Expectancy"}
-      {"field": "_source.fertility", "type": "nominal", "title": "Fertility"}
-    ]
-  }
-}
-```
-https://www.youtube.com/watch?v=5giacrHVYe4
-https://www.elastic.co/blog/custom-vega-visualizations-in-kibana
-https://afivan.com/2021/11/09/elastic-search-data-visualization-with-kibana-how-to-create-a-scatter-plot-with-vega-lite/
-```sh
-{
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {
-    "values": [
-      {"test": "ESWC2018", "Version": "1", "stepType": "query", "step": "query10", "time": "10"},
-      {"test": "ESWC2018", "Version": "1", "stepType": "import", "step": "import-ttl", "time": "10"},
-      {"test": "ESWC2018", "Version": "1", "stepType": "query", "step": "query11", "time": "9.5"},
-      {"test": "ESWC2018", "Version": "2", "stepType": "query", "step": "query10", "time": "11"},
-      {"test": "ESWC2018", "Version": "2", "stepType": "query", "step": "query11", "time": "10.3"},
-      {"test": "ESWC2018", "Version": "3", "stepType": "query", "step": "query10", "time": "4"},
-      {"test": "ESWC2018", "Version": "3", "stepType": "query", "step": "query11", "time": "6.5"},
-      {"test": "LUBM-10", "Version": "1", "stepType": "query", "step": "query10", "time": "5.3"},
-      {"test": "LUBM-10", "Version": "1", "stepType": "query", "step": "query11", "time": "4.6"},
-      {"test": "LUBM-10", "Version": "2", "stepType": "query", "step": "query10", "time": "5.4"},
-      {"test": "LUBM-10", "Version": "2", "stepType": "query", "step": "query11", "time": "4.5"},
-      {"test": "LUBM-10", "Version": "3", "stepType": "query", "step": "query10", "time": "5"},
-      {"test": "LUBM-10", "Version": "3", "stepType": "query", "step": "query11", "time": "6"}
-    ]
-  },
-  "transform": [
-    {"filter": "datum.stepType === 'query'"},
-    {"pivot": "Version", "value": "time", "groupby": ["step", "test"]}
-  ],
-  "mark": {"type": "point", "tooltip": {"content": "data"}},
-  "encoding": {
-    "x": {"field": "1", "type": "quantitative", "title": "Time in Version 2"},
-    "y": {"field": "2", "type": "quantitative", "title": "Time in Version 1"}
-  }
-}
-```
-```sh
-{
-  $schema: https://vega.github.io/schema/vega-lite/v5.json
-  title: RDFox Compare
-  "mark": {"type": "point", "tooltip": {"content": "data"}},
-  data: {
-    url: {
-      %context%: true
-      index: scatter
-      body: {
-        size: 10000
-        _source: ["rdfox_version", "time", "repetition_id", "runId", "step", "stepType", "system", "architecture", "test_name"]
-      }
-    }
-    format: {property: "hits.hits"}
-  }
-  "transform":[
-    {"pivot": "_source.rdfox_version", "value": "_source.time", "groupby": ["_source.step", "_source.test_name"]}
-  ]
-  
-  encoding: {
-    x: {field: "3.1.1", type: "quantitative", title: "Version 3.1.1"}
-    y: {field: "6.2", type: "quantitative", title: "Version 6.2"}
-  }
-}
-```
-```sh
-{
-  $schema: https://vega.github.io/schema/vega-lite/v5.json
-  title: RDFox Compare
-  "mark": {"type": "point", "tooltip": {"content": "data"}},
-  data: {
-    url: {
-      %context%: true
-      index: scatter1
-      body: {
-        size: 10000
-        _source: ["test", "Version", "step", "stepType", "time"]
-      }
-    }
-    format: {property: "hits.hits"}
-  }
-  "transform":[
-    {"pivot": "_source.Version", "value": "_source.time", "groupby": ["_source.step", "_source.test"]}
-  ],
-  encoding: {
-    x: {field: "1", type: "quantitative", title: "Version 3.1.1"}
-    y: {field: "2", type: "quantitative", title: "Version 6.2"}
-  }
-}
-```
-```sh
-POST /your_index/_delete_by_query
-{
-  "query": {
-    "bool": {
-      "must_not": [
-        {
-          "term": {
-            "stepType": "query"
-          }
-        }
-      ]
-    }
-  }
-}
-```
-```sh
-POST /20230725-linux-query/_update_by_query
-{
-  "query": {
-    "match": {
-      "rdfox_version": "3.1.1"
-    }
-  },
-  "script": {
-    "source": "ctx._source.rdfox_version = \"oldest\""
-  }
-}
-```
-
-Worked code:
-```sh
-{
-  $schema: https://vega.github.io/schema/vega-lite/v5.json
-  title: RDFox
-  "mark": {"type": "point", "tooltip": {"content": "data"}},
-  data: {
-    url: {
-      %context%: true
-      index: 20230725-linux-query
-      body: {
-        size: 10000
-        _source: ["test_name", "rdfox_version", "step", "stepType", "time", "repetition_id"]
-      }
-    }
-    format: {property: "hits.hits"}
-  }
-  "transform": [
-    {"pivot": "_source.rdfox_version", "value": "_source.time", "groupby": ["_source.step", "_source.test_name", "_source.repetition_id"]}
-  ],
-  "encoding": {
-    "x": {"field": "previous", "type": "quantitative", "title": "Time in Version 1"},
-    "y": {"field": "latest", "type": "quantitative", "title": "Time in Version 2"}
-  }
-}
-```
-```sh
-POST /20230725-win64/_update_by_query
-{
-  "query": {
-    "exists": {
-      "field": "numFactsProcessed"
-    }
-  },
-  "script": {
-    "source": "if (ctx._source.time == 0.0) { ctx._source.time = 0.001 }", 
-    "lang": "painless"
-  }
-}
-```
