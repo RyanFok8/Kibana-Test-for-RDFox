@@ -98,7 +98,7 @@ We first convert string values to integer/float:
 (change the index name **20230714-linux** accordingly)
 
 ```sh
-POST /20230714-linux/_update_by_query
+POST /your_index/_update_by_query
 {
   "query": {
     "exists": {
@@ -111,7 +111,7 @@ POST /20230714-linux/_update_by_query
   }
 }
 
-POST /20230714-linux/_update_by_query
+POST /your_index/_update_by_query
 {
   "query": {
     "exists": {
@@ -124,7 +124,7 @@ POST /20230714-linux/_update_by_query
   }
 }
 
-POST /20230725-linux/_update_by_query
+POST /your_index/_update_by_query
 {
   "query": {
     "match_all": {}
@@ -137,7 +137,7 @@ POST /20230725-linux/_update_by_query
 ```
 To avoid divide by zero error, we convert time that is 0 second to 1 millisecond
 ```sh
-POST /20230725-win64/_update_by_query
+POST /your_index/_update_by_query
 {
   "query": {
     "exists": {
@@ -149,7 +149,7 @@ POST /20230725-win64/_update_by_query
     "lang": "painless"
   }
 }
-POST /20230725-win64/_update_by_query
+POST /your_index/_update_by_query
 {
   "query": {
     "exists": {
@@ -165,7 +165,7 @@ POST /20230725-win64/_update_by_query
 
 And perform the required calculation:
 ```sh
-POST /20230714-linux/_update_by_query
+POST /your_index/_update_by_query
 {
   "query": {
     "bool": {
@@ -181,7 +181,7 @@ POST /20230714-linux/_update_by_query
   }
 }
 
-POST /20230714-linux/_update_by_query
+POST /your_index/_update_by_query
 {
   "query": {
     "bool": {
@@ -257,7 +257,7 @@ POST /your_index/_delete_by_query
 We then change the 3 rdfox_versions to "oldest", "previous", "latest" respectively as we will have to do [pivot transform](https://vega.github.io/vega-lite/docs/pivot.html) later on.
 Format:
 ```sh
-POST /20230725-linux-query/_update_by_query
+POST /your_index/_update_by_query
 {
   "query": {
     "match": {
@@ -293,7 +293,7 @@ The data is now in the format that we want. Reopen the Vega editor and paste the
   data: {
     url: {
       %context%: true
-      index: 20230725-linux-query
+      index: your_index
       body: {
         size: 10000
         _source: ["test_name", "rdfox_version", "step", "stepType", "time", "repetition_id"]
