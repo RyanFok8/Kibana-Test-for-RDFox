@@ -354,19 +354,12 @@ You can also try visualisation of data on a smaller scale in the [Vega-Lite onli
 }
 ```
 
-
-
 ### If you have a saved dashboard `.ndjson`
 1. Open the sidebar, scroll to the bottom, and click **Management**
 2. In the **Kibana** section, choose **Saved objects**
-3. Import the dashboard you want
-
-
-
+3. Import the dashboard you want, ensure the dashboard is linked to the appropriate index file
 
 ## Others
-
-
 ### Formatting numbers
 If you want to change the presentation of numbers in visualisation, e.g., to the nearest integer, to 3 decimal places...
 1. Open the sidebar, scroll to the bottom, and click **Management**
