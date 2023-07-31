@@ -289,27 +289,28 @@ The data is now in the format that we want. Reopen the Vega editor and paste the
 
 ``` sh
 {
-  $schema: https://vega.github.io/schema/vega-lite/v5.json
-  title: RDFox 
-  "mark": {"type": "point", "tooltip": {"content": "data"}}, 
-  data: {
-    url: {
-      %context%: true
-      index: your_index
-      body: {
-        size: 10000
-        _source: ["test_name", "rdfox_version", "step", "stepType", "time", "repetition_id"]
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "RDFox",
+  "mark": {"type": "point", "tooltip": {"content": "data"}},
+  "data": {
+    "url": {
+      "%context%": true,
+      "index": "your_index",
+      "body": {
+        "size": 10000,
+        "_source": ["test_name", "rdfox_version", "step", "stepType", "time", "repetition_id"]
       }
-    }
-    format: {property: "hits.hits"}
-  }
+    },
+    "format": {"property": "hits.hits"}
+  },
   "transform": [
-    {"pivot": "_source.rdfox_version", "value": "_source.time", "groupby": ["_source.step", "_source.test_name", "_source.repetition_id"]}, 
+    {"pivot": "_source.rdfox_version", "value": "_source.time", "groupby": ["_source.step", "_source.test_name", "_source.repetition_id", "_source.stepType"]},
     {"aggregate": [
       {"op": "mean", "field": "oldest", "as": "mean_oldest"},
       {"op": "mean", "field": "previous", "as": "mean_previous"},
-      {"op": "mean", "field": "latest", "as": "mean_latest"}], "groupby": ["_source.step", "_source.test_name"]},
-  ], 
+      {"op": "mean", "field": "latest", "as": "mean_latest"}
+    ], "groupby": ["_source.step", "_source.test_name", "_source.stepType"]}
+  ],
   "encoding": {
     "x": {"field": "mean_previous", "type": "quantitative", "title": "Time in Version 1"},
     "y": {"field": "mean_latest", "type": "quantitative", "title": "Time in Version 2"}
